@@ -35,12 +35,13 @@ function Invoices() {
     const response = await fetch('http://localhost:3001/auth/getOrders');
     console.log(response)
     const data = await response.json();
-    console.log(data)
-  setEmployees( data.createdAt); 
-  
+    
+  setEmployees( data); 
+  console.log(employees)
    
 
   }
+
   fetchData();},[])
 
 
@@ -59,6 +60,24 @@ function Invoices() {
       </MDBox>
       <MDBox p={2}>
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
+        {employees && employees.map((employee) => {
+    const createdAt = new Date(employee.createdAt);
+    const year = createdAt.getFullYear().toString().slice(-2); // Get last two digits of the year
+    const month = (createdAt.getMonth() + 1).toString().padStart(2, '0'); // Get month and pad with leading zero if needed
+    const day = createdAt.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if needed
+
+    const formattedDate = `${year} ${day} ${month}`; // Format as yy dd mm
+    
+
+    return (
+        <Invoice 
+            key={employee._id} 
+            id={employee._id} 
+            date={formattedDate}  
+            price={"$"+employee.total_amount} 
+        />
+    );
+})}
           <Invoice date="March, 01, 2020" id="#MS-415646" price="$180" />
           <Invoice date="February, 10, 2021" id="#RV-126749" price="$250" />
           <Invoice date="April, 05, 2020" id="#QW-103578" price="$120" />

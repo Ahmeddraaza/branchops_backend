@@ -15,7 +15,9 @@ Coded by www.creative-tim.com
 /* eslint-disable prettier/prettier */
 
 
+
 export default {
+  
   sales: {
     labels: ["Jan","Feb","Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: { label: "Mobile apps", data: [50, 40, 300, 320, 500, 350, 200, 230, 500] },

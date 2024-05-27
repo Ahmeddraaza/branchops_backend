@@ -56,7 +56,7 @@ function Dashboard() {
     async function revenue(){
       const response= await fetch('http://localhost:3001/auth/revenuebymonth')
       const data1=await response.json()
-      console.log(data1)
+  
       const responseArray = Object.entries(data1);
 
 // Separate the headings and data into two arrays
@@ -66,14 +66,13 @@ setGraphdata(data.reverse());
 setGraphhead(headings.reverse());
 
 
-console.log('Headings:', graphhead); // Output: ['05', '04', '03']
-console.log('Data:', graphdata); 
+
     }
     async function fetchData() {
       const response = await fetch('http://localhost:3001/auth/count');
-      console.log(response)
+      
       const data = await response.json();
-      console.log(data)
+     
     setEmployees( data.count); 
     setRevenue("$ "+ data.revenue)
      
