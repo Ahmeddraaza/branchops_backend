@@ -9,8 +9,8 @@ const userrouter = require("./user");
 const authRouter = require("./auth");
 
 
-//router.use("/products", productRouter);
-//router.use("/order", orderouter);
+router.use("/products", productRouter);
+router.use("/order", orderouter);
 //router.use("/Admin",adminrouter)
 router.use("/auth", authRouter);
 router.use("/user", userrouter);

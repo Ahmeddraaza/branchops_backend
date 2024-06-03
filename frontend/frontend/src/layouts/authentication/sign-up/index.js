@@ -14,9 +14,10 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 // @mui material components
+/*
 import Card from "@mui/material/Card";
 import { useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
@@ -159,4 +160,4 @@ function Cover() {
   );
 }
 
-export default Cover;
+export default Cover;*/

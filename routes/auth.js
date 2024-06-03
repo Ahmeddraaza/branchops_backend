@@ -153,34 +153,29 @@ router.post("/login", async (req, res) => {
       }
     });
 
-    router.post('/addorders', async (req, res) => {
+router.post('/addorders', async (req, res) => {
 
       try {
+        const { customerName, products} = req.body;
 
+        // Check if products array is empty or not provided
+        if (!products || products.length === 0) {
+            return res.status(400).json({ msg: 'Products array cannot be empty' });
+        }
 
-          const { customerName, products, total_amount } = req.body;
-          const product = [];
-          for (let i = 0; i < products.length; i++) {
-            console.log(products[i]);
-              product[i] = await Product.findOne({ Product_name: products[i] });
-              if (!product) return res.json({ msg: "Product not found" });
-          }
-  
+        // Create a new order
+        const order = new Order({ customerName, products});
 
-          const newOrder = new Orders({
-              customerName,
-              products: product.map(product => product._id),
-              total_amount,
-              
-          });
-  
-          const savedOrder = await newOrder.save();
-          res.status(201).json(savedOrder);
-      } catch (err) {
-          console.error('Error creating order:', err);
-          res.status(500).json({ error: 'Server error' });
-      }
-  });
+        // Save the order
+        await order.save();
+        console.log('Order saved with total_amount:', order.total_amount);
+
+        res.status(201).json({ msg: 'Order created successfully', order, total_amount: order.total_amount });
+    } catch (error) {
+      console.error('Error while creating order:', error.message);
+      res.status(500).json({ msg: 'Server error', error: error.message });
+    }
+});
   
   router.post('/addproducts', async (req, res) => {
     try {

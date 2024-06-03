@@ -1,19 +1,17 @@
 /* eslint-disable prettier/prettier */
 
-
 import React, { useEffect, useState } from 'react';
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-import MDBadge from "components/MDBadge";
 
 export default function Data() {
-  const [employees, setEmployees] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const response = await fetch('http://localhost:3001/auth/getorders');
       const data = await response.json();
-      setEmployees(data);
+      setOrders(data);
     }
 
     fetchData();
@@ -39,14 +37,14 @@ export default function Data() {
     </MDBox>
   );
 
-  const rows = employees.map(employee => {
+  const rows = orders.map(order => {
     return {
-      Customer: <Author name={employee.customerName} email={employee.email} />,
-      Amount: <Job title={employee.total_amount} description="" />, // Adjust this as needed
+      Customer: <Author name={order.customerName} email={order.email} />,
+      Amount: <Job title={order.total_amount} description="" />, // Adjust this as needed
       
       OrderDate: (
         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          {new Date(employee.createdAt).toLocaleDateString()}
+          {new Date(order.createdAt).toLocaleDateString()}
         </MDTypography>
       ),
       action: (

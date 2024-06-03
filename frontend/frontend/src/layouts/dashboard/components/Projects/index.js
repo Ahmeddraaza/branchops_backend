@@ -1,103 +1,122 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 /* eslint-disable prettier/prettier */
 
-
-import { useState } from "react";
-
-// @mui material components
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-// Material Dashboard 2 React examples
-import DataTable from "examples/Tables/DataTable";
-
-// Data
-import data from "layouts/dashboard/components/Projects/data";
-
 function Projects() {
-  const { columns, rows } = data();
-  const [menu, setMenu] = useState(null);
+  const [orders, setOrders] = useState([]);
 
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
+  useEffect(() => {
+    async function fetchOrders() {
+      const response = await fetch('http://localhost:3001/auth/getorders');
+      const data = await response.json();
+      setOrders(data);
+    }
 
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={closeMenu}>Action</MenuItem>
-      <MenuItem onClick={closeMenu}>Another action</MenuItem>
-      <MenuItem onClick={closeMenu}>Something else</MenuItem>
-    </Menu>
-  );
+    fetchOrders();
+  }, []);
 
   return (
-    <Card>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-        <MDBox>
-          <MDTypography variant="h6" gutterBottom>
-            Projects
-          </MDTypography>
-          <MDBox display="flex" alignItems="center" lineHeight={0}>
-            <Icon
-              sx={{
-                fontWeight: "bold",
-                color: ({ palette: { info } }) => info.main,
-                mt: -0.5,
-              }}
-            >
-              done
-            </Icon>
-            <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp;<strong>30 done</strong> this month
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-        <MDBox color="text" px={2}>
-          <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
-            more_vert
-          </Icon>
-        </MDBox>
-        {renderMenu}
+    <Card id="orders">
+      <MDBox pt={3} px={2}>
+        <MDTypography variant="h6" fontWeight="medium">
+          Order Information
+        </MDTypography>
       </MDBox>
-      <MDBox>
-        <DataTable
-          table={{ columns, rows }}
-          showTotalEntries={false}
-          isSorted={false}
-          noEndBorder
-          entriesPerPage={false}
-        />
+      <MDBox pt={1} pb={2} px={2}>
+        <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
+          {orders.map((order) => (
+            <MDBox
+              component="li"
+              display="flex"
+              flexDirection="column"
+              p={2}
+              mb={2}
+              mt={2}
+              sx={{ background: "#f8f9fa", borderRadius: "8px" }}
+              key={order._id}
+            >
+              <MDTypography variant="h6" fontWeight="medium" sx={{ color: "#344767", fontWeight: 600 }}>
+                {order.customerName}
+              </MDTypography>
+              {order.products.map((product, index) => (
+                <MDBox key={index} lineHeight={1.25} mb={1}>
+                  <MDTypography variant="caption" fontWeight="medium" color="#7b809a" sx={{
+                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                    fontSize: "0.75rem",
+                    fontWeight: 300,
+                    lineHeight: 1.25,
+                    letterSpacing: "0.03333em",
+                    opacity: 1,
+                    textTransform: "none",
+                    verticalAlign: "unset",
+                    textDecoration: "none",
+                  }}>
+                    Product Name:
+                  </MDTypography>
+                  <MDTypography variant="caption" sx={{ color: "#344767", fontWeight: 600 }}>
+                    {product.productname}
+                  </MDTypography>
+                  <br />
+                  <MDTypography variant="caption" fontWeight="medium" color="#7b809a" sx={{
+                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                    fontSize: "0.75rem",
+                    fontWeight: 300,
+                    lineHeight: 1.25,
+                    letterSpacing: "0.03333em",
+                    opacity: 1,
+                    textTransform: "none",
+                    verticalAlign: "unset",
+                    textDecoration: "none",
+                  }}>
+                    Quantity:
+                  </MDTypography>
+                  <MDTypography variant="caption" sx={{ color: "#344767", fontWeight: 600 }}>
+                    {product.quantity}
+                  </MDTypography>
+                </MDBox>
+              ))}
+              <MDBox lineHeight={1.25} mb={1}>
+                <MDTypography variant="caption" fontWeight="medium" color="#7b809a" sx={{
+                  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                  fontSize: "0.75rem",
+                  fontWeight: 300,
+                  lineHeight: 1.25,
+                  letterSpacing: "0.03333em",
+                  opacity: 1,
+                  textTransform: "none",
+                  verticalAlign: "unset",
+                  textDecoration: "none",
+                }}>
+                  Total Amount:
+                </MDTypography>
+                <MDTypography variant="caption" sx={{ color: "#344767", fontWeight: 600 }}>
+                  {order.total_amount}
+                </MDTypography>
+              </MDBox>
+              <MDBox lineHeight={1.25}>
+                <MDTypography variant="caption" fontWeight="medium" color="#7b809a" sx={{
+                  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                  fontSize: "0.75rem",
+                  fontWeight: 300,
+                  lineHeight: 1.25,
+                  letterSpacing: "0.03333em",
+                  opacity: 1,
+                  textTransform: "none",
+                  verticalAlign: "unset",
+                  textDecoration: "none",
+                }}>
+                  Order Date:
+                </MDTypography>
+                <MDTypography variant="caption" sx={{ color: "#344767", fontWeight: 600 }}>
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+          ))}
+        </MDBox>
       </MDBox>
     </Card>
   );

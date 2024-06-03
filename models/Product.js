@@ -1,12 +1,9 @@
 const mongoose = require("mongoose");
-const productschema =  mongoose.Schema({
-    //prod_id: {
-        //type: mongoose.Schema.Types.ObjectId,
-       // default: mongoose.Types.ObjectId
-    //},
-    prod_id:  String,
+
+const productschema = new mongoose.Schema({
+    prod_id: String,
     Product_name: String,
-    Product_Brand: String, 
+    Product_Brand: String,
     quantity: Number,
     price: Number,
     createdAt: {
@@ -15,13 +12,6 @@ const productschema =  mongoose.Schema({
     }
 });
 
+const Product = mongoose.model('product_collects', productschema);
 
-
-
-
-
-
-const product_collect = mongoose.model('product_collect', productschema);
-
-module.exports = product_collect;
-
+module.exports = Product;
