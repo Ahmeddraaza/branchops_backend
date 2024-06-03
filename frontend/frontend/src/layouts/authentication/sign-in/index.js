@@ -1,23 +1,6 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
-
-// react-router-dom components
-import { Link, Navigate } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+/* eslint-disable prettier/prettier */
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -39,69 +22,57 @@ import MDButton from "components/MDButton";
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import { useSelector, useDispatch } from 'react-redux';
-
-import {setuser} from 'features/DataSlice';
-
+import { login } from 'layouts/store/authSlice';  
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function Basic() {
-  
-  const count = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
-  const [email, setEmail] = useState(" ");
-  const [password, setPassword] = useState(" ");
-  const [loggedin,setloggedIn]=useState(false)
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
-  const handleInput = (e) => ( 
-    console.log(e.target.value),
-    setEmail(e.target.value));
-    const handlePassword = (e) => ( 
-      console.log(e.target.value),
-      setPassword(e.target.value));
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
 
-
+  
       
+      
+   
 
-     const handleClick = async () => { 
-const data = {
-  email: email,
-  password: password
-};
+  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleInput = (e) => setEmail(e.target.value);
+  const handlePassword = (e) => setPassword(e.target.value);
 
-// Make the fetch request with the URL, method, headers, and body
-fetch('http://localhost:3001/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('POST request successful:', data);
-        if (data.token) { 
-          // Check if token exists in response
-          setloggedIn(true)
-          localStorage.setItem('token', data.token); // Save token to localStorage
-          //window.location.href = '/dashboard'; // Redirect to dashboard route
-        } else {
-          console.error('Login failed:', data.msg);
-        }
-      })
-      .catch(error => {
-        console.error('There was a problem with the POST request:', error);
+  const handleClick = async () => { 
+    const data = { email, password };
+
+    try {
+      const response = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(result)
+      if (result.token) {
+        dispatch(login(result));
+        console.log(result)
+        
+        localStorage.setItem('token', result.token);
+        navigate("/dashboard");
+      } else {
+        console.error('Login failed:', result.msg);
+      }
+    } catch (error) {
+      console.error('There was a problem with the POST request:', error);
+    }
   };
-
-
-
 
   return (
     <BasicLayout image={bgImage}>
@@ -144,7 +115,7 @@ fetch('http://localhost:3001/auth/login', {
               <MDInput type="email" label="Email" fullWidth onChange={handleInput} />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth onChange={handlePassword}  />
+              <MDInput type="password" label="Password" fullWidth onChange={handlePassword} />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -161,8 +132,22 @@ fetch('http://localhost:3001/auth/login', {
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleClick}>
                 sign in
-                {loggedin && <Navigate to="/dashboard"/>}
               </MDButton>
+            </MDBox>
+            <MDBox mt={3} mb={1} textAlign="center">
+              <MDTypography variant="button" color="text">
+                Don&apos;t have an account?{" "}
+                <MDTypography
+                  component={Link}
+                  to="/authentication/sign-up"
+                  variant="button"
+                  color="info"
+                  fontWeight="medium"
+                  textGradient
+                >
+                  Sign up
+                </MDTypography>
+              </MDTypography>
             </MDBox>
           </MDBox>
         </MDBox>

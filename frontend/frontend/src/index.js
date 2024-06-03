@@ -10,13 +10,13 @@ Coded by www.creative-tim.com
 
 =========================================================
 */
-
+/* eslint-disable prettier/prettier */
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 import { Provider } from "react-redux";
-import store from "features/store";
+import store from 'layouts/store/store.js'
 import { MaterialUIControllerProvider } from "context"; // Material Dashboard 2 React Context Provider
 import PrivateRoute from "PrivateRoute";
 
@@ -24,11 +24,13 @@ const container = document.getElementById("app"); // Ensure this matches the ID 
 const root = createRoot(container);
 
 root.render(
+  <Provider store={store}>  
   <BrowserRouter>
-    <Provider store={store}>
+    
       <MaterialUIControllerProvider>
         <App />
       </MaterialUIControllerProvider>
-    </Provider>
+    
   </BrowserRouter>
+  </Provider>
 );

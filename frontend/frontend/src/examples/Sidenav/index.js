@@ -12,6 +12,8 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+/* eslint-disable prettier/prettier */
+
 
 import { useEffect } from "react";
 
@@ -46,12 +48,20 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+import { useSelector } from "react-redux";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
+  
+  const userType=useSelector((state)=>state.auth.userType);
+
+  if (userType=='admin'){
+    routes=routes.filter((routes)=>
+    routes.name=='Dashboard' ||routes.name=='Billing')
+  }
 
   let textColor = "white";
 

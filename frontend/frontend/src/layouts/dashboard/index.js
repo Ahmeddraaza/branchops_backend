@@ -39,8 +39,12 @@ import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import { useEffect } from "react";
 import { set } from "mongoose";
+import { useSelector } from "react-redux";
+
 
 function Dashboard() {
+  const usertype=useSelector((state)=>state.auth.userType)
+  console.log(usertype)
 
   
 
