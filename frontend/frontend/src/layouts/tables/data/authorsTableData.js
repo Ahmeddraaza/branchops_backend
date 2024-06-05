@@ -65,7 +65,7 @@ export default function Data() {
     columns: [
       { Header: "author", accessor: "author", width: "45%", align: "left" },
       { Header: "function", accessor: "function", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
+
       { Header: "employed", accessor: "employed", align: "center" },
       { Header: "action", accessor: "action", align: "center" },
     ],

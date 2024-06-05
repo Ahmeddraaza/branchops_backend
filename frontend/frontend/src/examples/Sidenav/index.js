@@ -60,7 +60,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   if (userType=='admin'){
     routes=routes.filter((routes)=>
-    routes.name=='Dashboard' ||routes.name=='Billing')
+    routes.name=='Dashboard' ||routes.name=='Users' ||  routes.name == 'Notifications'||  routes.name == 'Create Order'||  routes.name == 'Manage Products'||  routes.name == 'Profile')
   }
 
   let textColor = "white";
