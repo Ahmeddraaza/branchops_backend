@@ -11,12 +11,6 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    branchId: {
-        type: String,
-        unique: true, // Ensure superadmin has a unique ID
-        sparse: true, // Allows null values for other user types
-        default: null // Set default value to null for other user types
-    },
     name: {
         type: String,
         required: true

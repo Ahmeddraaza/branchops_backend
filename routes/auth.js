@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 const Users = require("../models/Employees")
 const Orders = require("../models/order")
 const Product = require("../models/Product")
+const moment = require('moment')
 
 
 router.get('/revenuebymonth', async(req, res) => {
@@ -28,6 +29,30 @@ router.get('/revenuebymonth', async(req, res) => {
 
 
 })
+router.get('/dailysaleslatestweek', async (req, res) => {
+  try {
+    const dailySales = Array(7).fill(0);
+    const today = moment().startOf('day');
+    const startOfWeek = today.clone().startOf('isoWeek');
+
+    const orders = await Orders.find({
+      createdAt: {
+        $gte: startOfWeek.toDate(),
+        $lt: today.toDate()
+      }
+    });
+
+    orders.forEach(order => {
+      const dayOfWeek = moment(order.createdAt).isoWeekday() - 1;
+      dailySales[dayOfWeek] += order.total_amount;
+    });
+
+    res.json(  dailySales);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
 
 
 router.get('/revenue', async(req, res) => {
@@ -96,21 +121,29 @@ console.error(error)
 
 router.post("/signUp", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const {  userType, userId, name,email,phone, password, } = req.body;
 
     let user = await Users.findOne({ email });
     if (user) return res.json({ msg: "USER EXISTS" });
 
     await Users.create({
-      ...req.body,
+      email,
       password: await bcrypt.hash(password, 5),
+      userType,
+      userId,
+      name,
+      phone
     });
 
     return res.json({ msg: "CREATED" });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ msg: 'Server error', error: error.message });
   }
 });
+
+module.exports = router;
+
 
 router.post("/login", async (req, res) => {
     try {

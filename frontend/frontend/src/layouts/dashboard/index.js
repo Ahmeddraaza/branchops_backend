@@ -49,15 +49,24 @@ function Dashboard() {
   
 
   
+  
+  
 
-  const {  tasks } = reportsLineChartData;
+  const { tasks } = reportsLineChartData;
   const [employees, setEmployees] = useState([]);
-  const [revenue, setRevenue]=useState(0);
-  const[graphhead,setGraphhead]=useState([]);
-  const[graphdata,setGraphdata]=useState([]);
+  const [revenue, setRevenue] = useState(0);
+  const [graphhead, setGraphhead] = useState([]);
+  const [graphdata, setGraphdata] = useState([]);
+  const [dailySales, setDailySales] = useState(Array(7).fill(0));
 
   useEffect(() => {
     async function revenue(){
+      const response2 = await fetch('http://localhost:3001/auth/dailysaleslatestweek');
+      const data2 = await response2.json();
+      setDailySales(data2);
+      
+      
+      console.log(data2)
       const response= await fetch('http://localhost:3001/auth/revenuebymonth')
       const data1=await response.json()
   
@@ -101,6 +110,11 @@ for (var i=0;i<12;i++){
     labels: ["Jan","Feb","Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: { label: "Mobile apps", data: F },
   };
+  const F123= {
+    labels: ["M", "T", "W", "T", "F", "S", "S"],
+    datasets: { label: "Sales", data: [50, 20, 10, 22, 50, 10, 40] },
+  };
+  //reportsBarChartData= F123;
   
   return (
     <DashboardLayout>
@@ -176,7 +190,7 @@ for (var i=0;i<12;i++){
                   title="website views"
                   description="Last Campaign Performance"
                   date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
+                  chart={F123}
                 />
               </MDBox>
             </Grid>

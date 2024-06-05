@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -33,12 +33,9 @@ function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   
-
-  
-      
-      
-   
+  const logged = useSelector((state)=>(state.auth.status));
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const handleInput = (e) => setEmail(e.target.value);
@@ -59,18 +56,15 @@ function Basic() {
       }
 
       const result = await response.json();
-      console.log(result)
       if (result.token) {
         dispatch(login(result));
-        console.log(result)
-        
         localStorage.setItem('token', result.token);
         navigate("/dashboard");
       } else {
-        console.error('Login failed:', result.msg);
+        setError('Incorrect username or password');
       }
     } catch (error) {
-      console.error('There was a problem with the POST request:', error);
+      setError('There was a problem with the POST request');
     }
   };
 
@@ -131,9 +125,16 @@ function Basic() {
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleClick}>
-                sign in
+                Sign in
               </MDButton>
             </MDBox>
+            {error && (
+              <MDBox mt={2}>
+                <MDTypography variant="caption" color="error">
+                  {error}
+                </MDTypography>
+              </MDBox>
+            )}
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}

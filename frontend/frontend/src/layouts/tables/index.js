@@ -29,11 +29,10 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
+import UserSignUp from "layouts/tables/data/UserSignUpForm";
 
 function Tables() {
   const { columns, rows } = authorsTableData();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
 
   return (
     <DashboardLayout>
@@ -53,7 +52,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                User Roles
+                  User Roles
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -80,17 +79,11 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Projects Table
+                  User Sign Up
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: pColumns, rows: pRows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+                <UserSignUp />
               </MDBox>
             </Card>
           </Grid>

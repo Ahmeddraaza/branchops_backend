@@ -40,7 +40,7 @@ export default function UserSignUp() {
   return (
     <MDBox pt={3} px={3}>
       <MDTypography variant="h6" fontWeight="medium">
-        User Sign Up
+         Create User
       </MDTypography>
       <MDBox mt={3}>
         <MDInput
@@ -57,15 +57,6 @@ export default function UserSignUp() {
           fullWidth
           name="userId"
           value={formData.userId}
-          onChange={handleChange}
-        />
-      </MDBox>
-      <MDBox mt={3}>
-        <MDInput
-          label="Branch ID"
-          fullWidth
-          name="branchId"
-          value={formData.branchId}
           onChange={handleChange}
         />
       </MDBox>
