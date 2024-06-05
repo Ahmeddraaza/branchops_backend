@@ -57,6 +57,7 @@ import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
+  
   const [controller, dispatch] = useMaterialUIController();
   const {
     miniSidenav,
@@ -118,6 +119,7 @@ export default function App() {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
+      
 
       if (route.route && loggedIn && route.key !== "sign-in") {
         return <Route exact path={route.route} element={route.component} key={route.key} />;

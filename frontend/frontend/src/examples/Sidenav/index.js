@@ -49,19 +49,39 @@ import {
   setWhiteSidenav,
 } from "context";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from 'layouts/store/authSlice';
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
+  const dispatch2 =useDispatch();
+  const loggedIn= useSelector((state)=>state.auth.status)
+
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
   
   const userType=useSelector((state)=>state.auth.userType);
+  if(!loggedIn){
+    routes=routes.filter((routes)=>
+      routes.name=='Sign In' 
+  )
+  }
 
   if (userType=='admin'){
     routes=routes.filter((routes)=>
     routes.name=='Dashboard' ||routes.name=='Users' ||  routes.name == 'Notifications'||  routes.name == 'Create Order'||  routes.name == 'Manage Products'||  routes.name == 'Profile')
   }
+  if (userType=='cashier'){
+    routes=routes.filter((routes)=>
+      routes.name == 'Create Order'||  routes.name == 'Manage Products'||  routes.name == 'Profile')
+  }
+  if(userType=='operational manager'){
+   routes=routes.filter((routes)=>
+      routes.name == 'Notifications'||  routes.name == 'Create Order'||  routes.name == 'Manage Products'||  routes.name == 'Profile')
+  }
+
+  
 
   let textColor = "white";
 
@@ -71,6 +91,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     textColor = "inherit";
   }
 
+  const handleClick=()=>{
+    dispatch2(logout(false));
+    
+  }
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
@@ -188,7 +212,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           (darkMode && !transparentSidenav && whiteSidenav)
         }
       />
-      <List>{renderRoutes}</List>
+      <List>{renderRoutes}
+      <MDButton onClick={handleClick}>Logout</MDButton></List>
     </SidenavRoot>
   );
 }
