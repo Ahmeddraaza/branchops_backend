@@ -169,7 +169,8 @@ router.post("/login", async (req, res) => {
       res.json({
         msg: "LOGGED IN",
         token,
-        userType:user.userType
+        userType:user.userType,
+        user_id:user.userId
       });
     } catch (error) {
       console.error(error);

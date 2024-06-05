@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import MDBox from "components/MDBox";
@@ -16,15 +18,16 @@ import team1 from "assets/images/team-1.jpg";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
-
+import { useSelector } from "react-redux";
 function Overview() {
   const [userData, setUserData] = useState(null);
-
+  const userid= useSelector((state)=>(state.auth.userid))
+  
   useEffect(() => {
     async function fetchData() {
       try {
         // Fetch user data from the API
-        const response = await fetch("http://localhost:3001/user/getUser/123456"); // Replace 123456 with actual user ID
+        const response = await fetch(`http://localhost:3001/user/getUser/${userid}`); // Replace 123456 with actual user ID
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -55,7 +58,7 @@ function Overview() {
                     email: userData.email,
                     location: userData.branchId,
                   }}
-                  action={{ route: "", tooltip: "Edit Profile" }}
+                  action={{ route: "" }}
                   shadow={false}
                 />
               )}

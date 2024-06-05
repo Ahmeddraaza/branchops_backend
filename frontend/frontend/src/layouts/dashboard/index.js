@@ -108,11 +108,11 @@ for (var i=0;i<12;i++){
 
   const sales= {
     labels: ["Jan","Feb","Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: { label: "Mobile apps", data: F },
+    datasets: { label: "Monthly Sales", data: F },
   };
   const F123= {
     labels: ["M", "T", "W", "T", "F", "S", "S"],
-    datasets: { label: "Sales", data: [50, 20, 10, 22, 50, 10, 40] },
+    datasets: { label: "Week Sales", data:  dailySales },
   };
   //reportsBarChartData= F123;
   
@@ -122,25 +122,13 @@ for (var i=0;i<12;i++){
       <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Orders"
-                count="1"
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
-                }}
-              />
-            </MDBox>
+            
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
-                title="Today's Users"
+                title="Today's Orders"
                 count={employees}
                 percentage={{
                   color: "success",
@@ -166,19 +154,7 @@ for (var i=0;i<12;i++){
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
+
           </Grid>
         </Grid>
         <MDBox mt={4.5}>
@@ -187,9 +163,8 @@ for (var i=0;i<12;i++){
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
+                  title="Weekly Sales"
+                  
                   chart={F123}
                 />
               </MDBox>
@@ -198,26 +173,17 @@ for (var i=0;i<12;i++){
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
+                  title="Monthly Sales"
+                  
+                  
+                 
                   chart={sales}
                 />
               </MDBox>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
+              <OrdersOverview />
               </MDBox>
             </Grid>
           </Grid>
@@ -228,7 +194,7 @@ for (var i=0;i<12;i++){
               <Projects />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
+              
             </Grid>
           </Grid>
         </MDBox>
