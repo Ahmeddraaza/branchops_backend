@@ -31,28 +31,45 @@ router.get('/revenuebymonth', async(req, res) => {
 })
 router.get('/dailysaleslatestweek', async (req, res) => {
   try {
+    // Initialize dailySales array for 7 days (Monday = 0, Sunday = 6)
     const dailySales = Array(7).fill(0);
-    const today = moment().startOf('day');
-    const startOfWeek = today.clone().startOf('isoWeek');
 
+    // Define the start and end of the week (UTC handling)
+    const today = moment.utc().startOf('day'); // Use UTC to ensure consistency
+    const startOfWeek = moment.utc().startOf('isoWeek'); // Start of the week (Monday)
+
+    console.log(`Fetching orders from ${startOfWeek.toISOString()} to ${today.toISOString()}`);
+
+    // Fetch orders created within the current week
     const orders = await Orders.find({
       createdAt: {
         $gte: startOfWeek.toDate(),
-        $lt: today.toDate()
-      }
+        $lte: today.endOf('day').toDate(), // Include today until the end of the day
+      },
     });
 
-    orders.forEach(order => {
-      const dayOfWeek = moment(order.createdAt).isoWeekday() - 1;
-      dailySales[dayOfWeek] += order.total_amount;
+    console.log(`Total orders found: ${orders.length}`);
+
+    // Aggregate sales by day of the week
+    orders.forEach((order) => {
+      const dayOfWeek = moment(order.createdAt).isoWeekday() - 1; // Map Monday = 0, Sunday = 6
+      console.log(
+        `Order ID: ${order._id}, Created At: ${order.createdAt}, Day of Week: ${dayOfWeek}`
+      );
+      const totalAmount = order.total_amount || 0; // Safeguard against undefined/null `total_amount`
+      dailySales[dayOfWeek] += totalAmount;
     });
 
-    res.json(  dailySales);
+    console.log(`Daily sales array: ${dailySales}`);
+
+    // Send the result
+    res.json(dailySales);
   } catch (error) {
-    console.error(error);
+    console.error('Error in /dailysaleslatestweek:', error);
     res.status(500).send('Server error');
   }
 });
+
 
 
 router.get('/revenue', async(req, res) => {
@@ -222,6 +239,26 @@ router.post('/addorders', async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 });
+
+router.get('/bestsellingproducts', async (req, res) => {
+  try {
+    // Fetch all products
+    const products = await Product.find();
+
+    // Sort products by quantity in ascending order (lowest first)
+    const sortedProducts = products.sort((a, b) => a.quantity - b.quantity);
+
+    // Select the top products with the lowest quantities (best-selling)
+    // For instance, fetch the top 5 products
+    const bestSellingProducts = sortedProducts.slice(0, 5);
+
+    return res.json(bestSellingProducts);
+  } catch (error) {
+    console.error('Error fetching best-selling products:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 
 

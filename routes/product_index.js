@@ -5,13 +5,14 @@ var router = express.Router();
 // Create a new product
 router.post('/addproducts', async (req, res) => {
     try {
-        const { prod_id, Product_name, product_brand, quantity, price } = req.body;
+        const { prod_id, Product_name, product_brand, quantity, price, image} = req.body;
         const newProduct = new Product({
             prod_id,
             Product_name,
             product_brand,
             quantity,
-            price
+            price,
+            image
         });
         await newProduct.save();
         res.status(200).json({ msg: 'Product created successfully', data: newProduct });

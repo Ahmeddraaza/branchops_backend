@@ -6,6 +6,7 @@ const productschema = new mongoose.Schema({
     Product_Brand: String,
     quantity: Number,
     price: Number,
+    image: String,
     createdAt: {
         type: Date,
         default: Date.now
